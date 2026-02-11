@@ -19,42 +19,49 @@ The project follows a modular **Hub-and-Spoke** architecture designed for reliab
 graph TD
     %% Data Sources
     subgraph Sources [Data Sources]
-        HW[Host Hardware<br/>CPU, RAM, NVIDIA GPU]
-        API[Crypto API<br/>CoinGecko]
+        HW["🖥️ Host Hardware<br/>(CPU, RAM, NVIDIA GPU)"]
+        API["☁️ Crypto API<br/>(CoinGecko)"]
     end
 
     %% Core Application
     subgraph Core [Core Logic]
-        Agent[Python Agent<br/>Orchestrator]
+        Agent["🐍 Python Agent<br/>(Orchestrator)"]
     end
 
     %% Storage & Viz
     subgraph Persistence [Storage & Visualization]
-        DB[(PostgreSQL DB<br/>Docker Container)]
-        Grafana[Grafana Dashboard<br/>Docker Container]
+        DB[("🗄️ PostgreSQL DB<br/>(Docker Container)")]
+        Grafana["📈 Grafana Dashboard<br/>(Docker Container)"]
     end
 
     %% Interaction
     subgraph Interface [User Interface]
-        TG[Telegram Bot API]
-        User[User]
+        TG["🤖 Telegram Bot API"]
+        User["👤 User"]
     end
 
     %% Flows
-    HW -->|Native Telemetry<br/>psutil/GPUtil| Agent
-    API -->|JSON Market Data<br/>HTTPS| Agent
-    Agent -->|Store Time-Series<br/>Metrics| DB
-    DB -->|Historical Data| Grafana
-    Agent -->|Alerts & Graphs| TG
-    TG -->|Notifications| User
-    User -->|Commands<br/>/status /graph| TG
-    TG -->|Execute| Agent
+    HW == "Native Telemetry<br/>(via psutil/GPUtil)" ==> Agent
+    API -- "JSON Market Data<br/>(HTTPS)" --> Agent
+    
+    Agent -- "Store Time-Series Metrics" --> DB
+    DB -- "Read Historical Data" --> Grafana
+    
+    Agent -- "Push Alerts & Graphs" --> TG
+    TG -- "Notifications" --> User
+    User -- "Commands (/status, /graph)" --> TG
+    TG -- "Execute Command" --> Agent
 
-    %% Styling
-    style Agent fill:#f9f,stroke:#333,stroke-width:2px
-    style HW fill:#d4e157,stroke:#333
-    style DB fill:#4db6ac,stroke:#333
-    style Grafana fill:#ffb74d,stroke:#333
+    %% Professional Styling (Blue/Grey Theme)
+    classDef core fill:#e1f5fe,stroke:#01579b,stroke-width:2px,color:#000;
+    classDef source fill:#fff3e0,stroke:#e65100,stroke-width:1px,color:#000;
+    classDef storage fill:#e8f5e9,stroke:#2e7d32,stroke-width:1px,color:#000;
+    classDef interface fill:#f3e5f5,stroke:#4a148c,stroke-width:1px,color:#000;
+
+    class Agent core;
+    class HW,API source;
+    class DB,Grafana storage;
+    class TG,User interface;
 ```
 
 ### Core Components
