@@ -19,42 +19,42 @@ The project follows a modular **Hub-and-Spoke** architecture designed for reliab
 graph TD
     %% Data Sources
     subgraph Sources [Data Sources]
-        HW[🖥️ Host Hardware<br/>(CPU, RAM, NVIDIA GPU)]
-        API[☁️ Crypto API<br/>(CoinGecko)]
+        HW[Host Hardware<br/>CPU, RAM, NVIDIA GPU]
+        API[Crypto API<br/>CoinGecko]
     end
 
     %% Core Application
     subgraph Core [Core Logic]
-        Agent[🐍 Python AgentOrchestrator]
+        Agent[Python Agent<br/>Orchestrator]
     end
 
     %% Storage & Viz
     subgraph Persistence [Storage & Visualization]
-        DB[(🗄️ PostgreSQL DB<br/>Docker Container)]
-        Grafana[📈 Grafana Dashboard<br/>Docker Container]
+        DB[(PostgreSQL DB<br/>Docker Container)]
+        Grafana[Grafana Dashboard<br/>Docker Container]
     end
 
     %% Interaction
     subgraph Interface [User Interface]
-        TG[🤖 Telegram Bot API]
-        User[👤 User]
+        TG[Telegram Bot API]
+        User[User]
     end
 
     %% Flows
-    HW == "Native Telemetry<br/>(via psutil/GPUtil)" ==> Agent
-    API -- "JSON Market Data<br/>(HTTPS)" --> Agent
-    Agent -- "Store Time-Series Metrics" --> DB
-    DB -- "Read Historical Data" --> Grafana
-    Agent -- "Push Alerts & Graphs" --> TG
-    TG -- "Notifications" --> User
-    User -- "Commands (/status, /graph)" --> TG
-    TG -- "Execute Command" --> Agent
+    HW -->|Native Telemetry<br/>psutil/GPUtil| Agent
+    API -->|JSON Market Data<br/>HTTPS| Agent
+    Agent -->|Store Time-Series<br/>Metrics| DB
+    DB -->|Historical Data| Grafana
+    Agent -->|Alerts & Graphs| TG
+    TG -->|Notifications| User
+    User -->|Commands<br/>/status /graph| TG
+    TG -->|Execute| Agent
 
     %% Styling
-    style Agent fill:#f9f,stroke:#333,stroke-width:2px,color:#000
-    style HW fill:#d4e157,stroke:#333,color:#000
-    style DB fill:#4db6ac,stroke:#333,color:#000
-    style Grafana fill:#ffb74d,stroke:#333,color:#000
+    style Agent fill:#f9f,stroke:#333,stroke-width:2px
+    style HW fill:#d4e157,stroke:#333
+    style DB fill:#4db6ac,stroke:#333
+    style Grafana fill:#ffb74d,stroke:#333
 ```
 
 ### Core Components
