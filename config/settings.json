@@ -1,0 +1,10 @@
+{
+  "thresholds": {
+    "gpu_max_temp": 75,
+    "gpu_max_load": 98,
+    "ram_max_usage": 90,
+    "btc_min_price": 60000,
+    "eth_min_price": 2000
+  },
+  "coins": ["bitcoin", "ethereum"]
+}

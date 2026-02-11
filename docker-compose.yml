@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: cstm_db
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: cstm_db
+    ports:
+      - "5432:5432"  # Port for hybrid mode (windows + docker)
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - default
+# use ctrl + '/' to note all "app" code lines if you are on windows
+  app:
+    build: .
+    container_name: cstm_app
+    restart: on-failure
+    # pid: "host" # Works on Linux only
+    depends_on:
+      - db
+    environment:
+      - POSTGRES_HOST=db
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=cstm_db
+      - TELEGRAM_TOKEN=${TELEGRAM_TOKEN}
+      - CHAT_ID=${CHAT_ID}
+    networks:
+      - default
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: cstm_grafana
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    depends_on:
+      - db
+    networks:
+      - default
+
+volumes:
+  postgres_data:
+
+networks:
+  default:
+    driver: bridge
