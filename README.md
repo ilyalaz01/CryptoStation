@@ -16,12 +16,47 @@
 The project implements a **Producer-Consumer** pattern with time-series persistence.
 
 ```mermaid
-graph LR
-    A[Python Agent] -->|Metrics| B[(PostgreSQL DB)]
-    C[Crypto API] -->|Prices| A
-    B -->|Visualize| D[Grafana Dashboard]
-    A -->|Alerts| E[Telegram Bot]
-    User -->|Commands| E
+graph TD
+    %% Data Sources
+    subgraph Sources [Data Sources]
+        HW[🖥️ Host Hardware<br/>(CPU, RAM, NVIDIA GPU)]
+        API[☁️ Crypto API<br/>(CoinGecko)]
+    end
+
+    %% Core Application
+    subgraph Core [Core Logic]
+        Agent[🐍 Python AgentOrchestrator]
+    end
+
+    %% Storage & Viz
+    subgraph Persistence [Storage & Visualization]
+        DB[(🗄️ PostgreSQL DB<br/>Docker Container)]
+        Grafana[📈 Grafana Dashboard<br/>Docker Container]
+    end
+
+    %% Interaction
+    subgraph Interface [User Interface]
+        TG[🤖 Telegram Bot API]
+        User[👤 User]
+    end
+
+    %% Flows
+    HW == "Native Telemetry<br/>(via psutil/GPUtil)" ==> Agent
+    API -- "JSON Market Data<br/>(HTTPS)" --> Agent
+    
+    Agent -- "Store Time-Series Metrics" --> DB
+    DB -- "Read Historical Data" --> Grafana
+    
+    Agent -- "Push Alerts & Graphs" --> TG
+    TG -- "Notifications" --> User
+    User -- "Commands (/status, /graph)" --> TG
+    TG -- "Execute Command" --> Agent
+
+    %% Styling
+    style Agent fill:#f9f,stroke:#333,stroke-width:2px,color:#000
+    style HW fill:#d4e157,stroke:#333,color:#000
+    style DB fill:#4db6ac,stroke:#333,color:#000
+    style Grafana fill:#ffb74d,stroke:#333,color:#000
 ```
 
 ### Core Components
