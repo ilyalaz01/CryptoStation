@@ -13,7 +13,7 @@
 
 ## 🏗 System Architecture
 
-The project implements a **Producer-Consumer** pattern with time-series persistence.
+The project follows a modular **Hub-and-Spoke** architecture designed for reliability and accurate data ingestion across different host OS environments.
 
 ```mermaid
 graph TD
@@ -43,10 +43,8 @@ graph TD
     %% Flows
     HW == "Native Telemetry<br/>(via psutil/GPUtil)" ==> Agent
     API -- "JSON Market Data<br/>(HTTPS)" --> Agent
-    
     Agent -- "Store Time-Series Metrics" --> DB
     DB -- "Read Historical Data" --> Grafana
-    
     Agent -- "Push Alerts & Graphs" --> TG
     TG -- "Notifications" --> User
     User -- "Commands (/status, /graph)" --> TG
