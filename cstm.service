@@ -1,0 +1,15 @@
+[Unit]
+Description=CryptoStation Telemetry Agent
+After=network.target docker.service
+Requires=docker.service
+
+[Service]
+User=root
+WorkingDirectory=/opt/cryptostation
+ExecStart=/usr/bin/python3 -m app.main
+Restart=always
+RestartSec=5
+EnvironmentFile=/opt/cryptostation/.env
+
+[Install]
+WantedBy=multi-user.target
