@@ -1,19 +1,19 @@
 import os
 from dotenv import load_dotenv
 
-# Загружаем переменные из .env
+# Load variables from .env
 load_dotenv()
 
 class Config:
-    # URL API
+    # API URL
     COINGECKO_URL = "https://api.coingecko.com/api/v3/simple/price"
     
-    # ВАЖНО: Ставим 60 секунд, чтобы не ловить ошибку 429
+    # IMPORTANT: Set to 60 seconds to avoid catching a 429 error (rate limit)
     SCAN_INTERVAL = 60 
     
-    # Телеграм (Если не найдено в .env, будет None)
+    # Telegram (If not found in .env, it will be None)
     TG_TOKEN = os.getenv("TELEGRAM_TOKEN")
     TG_CHAT_ID = os.getenv("CHAT_ID")
     
-    # Путь к файлу настроек порогов
+    # Path to the thresholds settings file
     SETTINGS_FILE = "config/settings.json"
