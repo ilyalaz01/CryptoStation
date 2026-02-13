@@ -1,21 +1,21 @@
-# 1. Берем легкий Python 3.10
+# 1. Use the lightweight Python 3.10 image
 FROM python:3.10-slim
 
-# 2. Устанавливаем системные библиотеки (нужны для psutil и postgres)
+# 2. Install system libraries (needed for psutil and postgres)
 RUN apt-get update && apt-get install -y \
     gcc \
     libpq-dev \
     && rm -rf /var/lib/apt/lists/*
 
-# 3. Создаем рабочую папку
+# 3. Create the working directory
 WORKDIR /app
 
-# 4. Копируем список библиотек и устанавливаем их
+# 4. Copy the list of libraries and install them
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# 5. Копируем весь наш код внутрь контейнера
+# 5. Copy all our code inside the container
 COPY . .
 
-# 6. Команда запуска
+# 6. Startup command
 CMD ["python", "-m", "app.main"]
